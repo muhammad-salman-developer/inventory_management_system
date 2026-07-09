@@ -6,5 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    //
+    protected $fillable = [
+        'category_id',
+        'name',
+        'description',
+        'price',
+        'stock'
+    ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function product_images(){
+        return $this->hasMany(ProductImage::class);
+    }
 }
