@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,12 @@ Route::middleware(['auth', 'verified'])->group(function() {
     'index'=> 'can:view-category',
     'edit' => 'can:edit-category',
      'update'  => 'can:edit-category',
+    ]);
+      Route::resource('products', ProductController::class)
+    ->middleware([
+    'index'=> 'can:view-product',
+    'edit' => 'can:edit-product',
+     'update'  => 'can:edit-product',
     ]);
 
 

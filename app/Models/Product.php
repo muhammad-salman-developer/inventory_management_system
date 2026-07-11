@@ -11,13 +11,28 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'stock'
+        'stock',
     ];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-    public function product_images(){
+
+    public function product_images()
+    {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function frontImages()
+    {
+        return $this->hasMany(ProductImage::class)
+            ->where('type', 'front');
+    }
+
+    public function backImages()
+    {
+        return $this->hasMany(ProductImage::class)
+            ->where('type', 'back');
     }
 }

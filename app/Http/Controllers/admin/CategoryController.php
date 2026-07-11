@@ -55,7 +55,7 @@ class CategoryController extends Controller
      */
     public function edit(category $category)
     {
-       return response()->json($category);
+       return response()->json($category);  
     }
 
     /**
