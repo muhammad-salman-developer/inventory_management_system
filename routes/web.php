@@ -19,23 +19,25 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::middleware(['auth', 'verified'])->group(function() {
+Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('product/create',[])->middleware('can:create-product');
-    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::resource('categories', CategoryController::class);
-  Route::resource('categories', CategoryController::class)
-    ->middleware([
-    'index'=> 'can:view-category',
-    'edit' => 'can:edit-category',
-     'update'  => 'can:edit-category',
-    ]);
-      Route::resource('products', ProductController::class)
-    ->middleware([
-    'index'=> 'can:view-product',
-    'edit' => 'can:edit-product',
-     'update'  => 'can:edit-product',
-    ]);
+    Route::resource('categories', CategoryController::class)
+        ->middleware([
+            'index' => 'can:view-category',
+            'edit' => 'can:edit-category',
+            'update' => 'can:edit-category',
+            'delete' => 'can:delete-category',
+        ]);
+    Route::resource('products', ProductController::class)
+        ->middleware([
+            'index' => 'can:view-product',
+            'edit' => 'can:edit-product',
+            'update' => 'can:edit-product',
+            'destroy' => 'can:delete-product',
 
+        ]);
 
 });
 
