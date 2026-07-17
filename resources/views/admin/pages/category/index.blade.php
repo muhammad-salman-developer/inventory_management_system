@@ -6,7 +6,7 @@
         <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl flex justify-between border-b-0 border-b-solid rounded-b-2xl">
             <h6>Category Table</h6>
             <!-- Modal toggle -->
-            @can('view-category')
+            @can('create-category')
                 <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="button"
                     class="text-white !bg-cyan-600 font-medium rounded-lg text-sm px-4 py-2.5 text-center leading-5">
 

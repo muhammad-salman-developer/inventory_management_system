@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('categories', CategoryController::class)
         ->middleware([
             'index' => 'can:view-category',
+            'store' => 'can:create-category',
             'edit' => 'can:edit-category',
             'update' => 'can:edit-category',
             'delete' => 'can:delete-category',
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('products', ProductController::class)
         ->middleware([
             'index' => 'can:view-product',
+            'store' => 'can:create-product',
             'edit' => 'can:edit-product',
             'update' => 'can:edit-product',
             'destroy' => 'can:delete-product',

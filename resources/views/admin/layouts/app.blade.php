@@ -23,6 +23,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Main Styling -->
     <link href="{{ asset('admin/assets/css/argon-dashboard-tailwind.css') }}" rel="stylesheet" />
+    {{-- font awesome link --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body

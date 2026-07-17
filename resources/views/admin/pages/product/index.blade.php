@@ -3,10 +3,53 @@
 @section('main')
     <div
         class="relative flex flex-col w-full min-w-0 mb-0 break-words bg-white border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border max-w-4xl m-auto">
-        <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl flex justify-between border-b-0 border-b-solid rounded-b-2xl">
+        <div
+            class="p-6 pb-0 mb-0 bg-white rounded-t-2xl flex justify-between items-center border-b-0 border-b-solid rounded-b-2xl">
             <h6>Product Table</h6>
+<form action="{{ route('products.index') }}" method="GET">
+    <div class="flex flex-wrap gap-3 mb-4">
+
+        {{-- Search Input Group --}}
+        <div class="relative flex items-center">
+            <input type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search products..."
+                class="border border-slate-300 rounded-xl pl-4 pr-10 py-2 text-sm focus:border-cyan-400 focus:outline-none">
+
+            {{-- Search Icon Right Side --}}
+            <button type="submit"
+                class="absolute right-0 inset-y-0 flex items-center pr-3 text-slate-400 hover:text-cyan-500 transition-colors">
+                <i class="fas fa-search text-sm"></i>
+            </button>
+        </div>
+
+        {{-- Category Filter --}}
+        <select name="category_id"
+            onchange="this.form.submit()"
+            class="border border-slate-300 rounded-xl px-4 py-2 text-sm focus:border-cyan-400 focus:outline-none">
+            <option value="">All Categories</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}"
+                    {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+
+        {{-- Clear Button --}}
+        @if(request('search') || request('category_id'))
+            <a href="{{ route('products.index') }}"
+                class="px-4 py-2 text-slate-100 bg-slate-500 rounded-xl text-sm hover:bg-slate-600 transition-colors">
+                <i class="fas fa-times mr-1"></i>
+                Clear
+            </a>
+        @endif
+
+    </div>
+</form>
             <!-- Modal toggle -->
-            @can('view-category')
+            @can('create-product')
                 <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="button"
                     class="text-white !bg-cyan-600 font-medium rounded-lg text-sm px-4 py-2.5 text-center leading-5">
 
@@ -17,7 +60,6 @@
                     Add Product
                 </button>
             @endcan
-
         </div>
         <div id="successAlert"
             class="{{ session('success') ? '' : 'hidden' }} auto-fade-alert p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800 transition-opacity duration-500 ease-out opacity-100"
@@ -76,13 +118,13 @@
                                     {{ $product->description }}
                                 </td>
                                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent" ">
-                                                            {{ $product->price }}
-                                                            </td>
-                                                            <td class=" p-2 leading-normal text-center align-middle
-                                    bg-transparent border-b text-sm whitespace-nowrap shadow-transparent" ">
-                                            {{ $product->stock }}
-                                        </td>
-                                        <td class=" p-2 text-center border-b">
+                                                                                    {{ $product->price }}
+                                                                                    </td>
+                                                                                    <td class=" p-2 leading-normal text-center
+                                    align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent" ">
+                                                                    {{ $product->stock }}
+                                                                </td>
+                                                                <td class=" p-2 text-center border-b">
                                     @php
                                         $frontImage = $product->frontImages->first();
                                     @endphp
@@ -107,21 +149,22 @@
                                     @endif
                                 </td>
                                 <td class=" p-2 align-middle bg-transparent border-b whitespace-nowrap
-                                                    shadow-transparent">
+                                                                            shadow-transparent">
                                     <div class="flex justify-center gap-2">
                                         @can('edit-product')
                                             {{-- <a href="{{ route('categories.edit', $category->id) }}" data-name="{{ $cate }}"
                                                 class="font-medium text-white bg-blue-600 hover:bg-blue-700 py-1 px-3 rounded">Edit</a>
                                             --}}
-                                           <button type="button" onclick="openProductEditModal('{{ $product->id }}',
-                                           '{{ $product->category_id }}',
-                                            '{{ addslashes($product->name) }}',
-                                            '{{ addslashes($product->description) }}',
-                                            '{{ $product->price }}',
-                                            // '{{ $product->stock }}'
-                                            )">
-                                            Edit
-                                           </button>
+                                            <button type="button" onclick="openProductEditModal('{{ $product->id }}',
+                                                                               '{{ $product->category_id }}',
+                                                                                '{{ addslashes($product->name) }}',
+                                                                                '{{ addslashes($product->description) }}',
+                                                                                '{{ $product->price }}',
+                                                                                {{-- '{{ $product->stock }}' --}}
+                                                                                )"
+                                                class="font-medium text-white !bg-blue-600 hover:bg-blue-700 py-1 px-3 rounded">
+                                                Edit
+                                            </button>
                                         @endcan
 
                                         @can('delete-product')

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreProductRequest;
+use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -13,9 +15,24 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category','product_images'])->latest()->paginate(10);
+
+        $products = Product::with(['category', 'product_images'])
+
+            // Search
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('name', 'LIKE', '%'.$request->search.'%')
+                        ->orWhere('description', 'LIKE', '%'.$request->search.'%');
+                });
+            })
+            ->when($request->filled('category_id'), function ($query) use ($request) {
+                $query->where('category_id', $request->category_id);
+            })
+
+            ->latest()
+            ->paginate(10);
 
         $categories = Category::all();
 
@@ -30,19 +47,10 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:1',
-            'stock' => 'required|integer|min:0',
-            'front_images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'back_images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
 
-        // Product save karo
+        // Product saved
         $product = Product::create([
             'category_id' => $request->category_id,
             'name' => $request->name,
@@ -51,7 +59,7 @@ class ProductController extends Controller
             'stock' => $request->stock,
         ]);
 
-        // Front Images save karo
+        // Front Images saved
         if ($request->hasFile('front_images')) {
             foreach ($request->file('front_images') as $image) {
                 $path = $image->store('products', 'public');
@@ -63,7 +71,7 @@ class ProductController extends Controller
             }
         }
 
-        // Back Images save karo
+        // Back Images saved
         if ($request->hasFile('back_images')) {
             foreach ($request->file('back_images') as $image) {
                 $path = $image->store('products', 'public');
@@ -92,27 +100,19 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-         return response()->json([
-        'success' => true,
-        'product' => $product->load(['category', 'product_images'])
-    ]);
+        return response()->json([
+            'success' => true,
+            'product' => $product->load(['category', 'product_images']),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:1',
-            'front_images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'back_images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
 
-        // Basic info update karo
+        // Basic info update
         $product->update([
             'category_id' => $request->category_id,
             'name' => $request->name,
@@ -120,10 +120,10 @@ class ProductController extends Controller
             'price' => $request->price,
         ]);
 
-        // Agar new images upload hui hain
+        // if new images upload
         if ($request->hasFile('front_images')) {
 
-            // Purani front images delete
+            // old front images delete
             foreach ($product->product_images()->where('type', 'front')->get() as $image) {
 
                 $path = public_path('storage/'.$image->image);
@@ -135,7 +135,7 @@ class ProductController extends Controller
                 $image->delete();
             }
 
-            // Nayi images save
+            // New images save
             foreach ($request->file('front_images') as $image) {
 
                 $path = $image->store('products', 'public');
@@ -148,10 +148,10 @@ class ProductController extends Controller
             }
         }
 
-        // Agar new back images upload hui hain
+        // if new back images upload
         if ($request->hasFile('back_images')) {
 
-            // Purani back images delete karo
+            // old back images delete
             foreach ($product->product_images()->where('type', 'back')->get() as $image) {
 
                 $path = public_path('storage/'.$image->image);
@@ -160,11 +160,11 @@ class ProductController extends Controller
                     unlink($path);
                 }
 
-                // Database se record delete
+                // Database  record deleted
                 $image->delete();
             }
 
-            // Nayi back images save karo
+            // New back images save karo
             foreach ($request->file('back_images') as $image) {
 
                 $path = $image->store('products', 'public');
@@ -177,11 +177,11 @@ class ProductController extends Controller
             }
         }
 
-       return response()->json([
-    'success' => true,
-    'message' => 'Product updated successfully!',
-    'product' => $product->load(['category', 'product_images']), 
-]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Product updated successfully!',
+            'product' => $product->load(['category', 'product_images']),
+        ]);
     }
 
     /**
