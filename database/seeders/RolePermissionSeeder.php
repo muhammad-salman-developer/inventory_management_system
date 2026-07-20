@@ -32,6 +32,7 @@ class RolePermissionSeeder extends Seeder
         'create-supplier',
         'edit-supplier',
         'delete-supplier',
+        'view-supplier',
 
         // Customers
         'create-customer',
@@ -77,7 +78,7 @@ class RolePermissionSeeder extends Seeder
         'create-category', 'edit-category',
         'delete-category', 'view-category',
         'create-supplier', 'edit-supplier',
-        'delete-supplier',
+        'delete-supplier', 'view-supplier',
         'create-customer', 'edit-customer',
         'delete-customer',
         'create-purchase', 'view-purchase',

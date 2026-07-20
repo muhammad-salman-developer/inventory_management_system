@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'edit' => 'can:edit-product',
             'update' => 'can:edit-product',
             'destroy' => 'can:delete-product',
+
+        ]);
+            Route::resource('suppliers', SupplierController::class)
+        ->middleware([
+            'index' => 'can:view-supplier',
+            'store' => 'can:create-supplier',
+            'edit' => 'can:edit-supplier',
+            'update' => 'can:edit-supplier',
+            'destroy' => 'can:delete-supplier',
 
         ]);
 

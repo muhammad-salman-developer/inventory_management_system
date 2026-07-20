@@ -76,7 +76,7 @@
                         {{-- Front Image --}}
                         <div>
                             <label class="block mb-1 text-sm font-medium text-slate-700">
-                                Front Image <span class="text-xs text-gray-400">(chhodo agar change nahi karni)</span>
+                                Front Image 
                             </label>
                             <div class="flex items-center gap-3">
                                 <img id="editFrontPreview" src=""
@@ -89,7 +89,7 @@
                         {{-- Back Image --}}
                         <div>
                             <label class="block mb-1 text-sm font-medium text-slate-700">
-                                Back Image <span class="text-xs text-gray-400">(chhodo agar change nahi karni)</span>
+                                Back Image 
                             </label>
                             <div class="flex items-center gap-3">
                                 <img id="editBackPreview" src=""
