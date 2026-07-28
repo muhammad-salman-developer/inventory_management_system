@@ -35,4 +35,7 @@ class Product extends Model
         return $this->hasMany(ProductImage::class)
             ->where('type', 'back');
     }
+    public function purchaseItems(){
+        return $this->hasMany(PurchaseItem::class);
+    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'update' => 'can:edit-category',
             'delete' => 'can:delete-category',
         ]);
+    // products
     Route::resource('products', ProductController::class)
         ->middleware([
             'index' => 'can:view-product',
@@ -41,7 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'destroy' => 'can:delete-product',
 
         ]);
-            Route::resource('suppliers', SupplierController::class)
+    // suppliers
+    Route::resource('suppliers', SupplierController::class)
         ->middleware([
             'index' => 'can:view-supplier',
             'store' => 'can:create-supplier',
@@ -50,6 +53,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'destroy' => 'can:delete-supplier',
 
         ]);
+    // purchases routes
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/purchases', [PurchaseController::class, 'index'])->middleware('can:view-purchase')->name('purchases.index');
+        Route::get('/purchases/create', [PurchaseController::class, 'create'])->middleware('can:view-purchase')->name('purchases.create');
+        Route::post('/purchases', [PurchaseController::class, 'store'])
+            ->middleware('can:create-purchase')
+            ->name('purchases.store');
+        Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])
+            ->middleware('can:view-purchase')
+            ->name('purchases.show');
+    });
 
 });
 
