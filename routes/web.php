@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PurchaseController;
@@ -64,7 +65,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->middleware('can:view-purchase')
             ->name('purchases.show');
     });
-
+    // customer
+    Route::resource('customers', CustomerController::class)->middleware([
+        'index' => 'can:view-customer',
+        'store' => 'can:create-customer',
+        'edit' => 'can:edit-customer',
+        'update' => 'can:edit-customer',
+        'destroy' => 'can:delete-customer',
+    ]);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

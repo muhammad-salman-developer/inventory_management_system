@@ -100,7 +100,7 @@
                         </div>
                     </div>
 
-                    <!-- Footer Buttons (Ab yeh bilkul Create Modal jesa look aur style hai) -->
+                    <!-- Footer Buttons -->
                     <div class="flex items-center gap-3 pt-3 border-t border-slate-200">
                         <button type="button" onclick="closeProductEditModal()"
                             class="flex-1 py-2.5 px-2 text-cyan-600 border border-cyan-600 hover:bg-cyan-600 hover:text-white font-medium rounded-lg transition-colors text-sm">
