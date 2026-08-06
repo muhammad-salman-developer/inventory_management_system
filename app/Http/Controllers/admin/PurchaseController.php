@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PurchaseRequest;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseItem;
+use App\Models\Stock;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
@@ -26,20 +28,8 @@ class PurchaseController extends Controller
         return view('admin.pages.purchase.create', compact('suppliers', 'products'));
     }
 
-    public function store(Request $request)
+    public function store(PurchaseRequest $request)
     {
-        $request->validate([
-            'supplier_id' => 'required|exists:suppliers,id',
-            'date' => 'required|date',
-            'tax' => 'nullable|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0',
-            'items' => 'required|array|min:1',
-            'items.*.product_id' => 'required|exists:products,id',
-            'items.*.quantity' => 'required|integer|min:1',
-            'items.*.unit_price' => 'required|numeric|min:0',
-            'items.*.tax' => 'nullable|numeric|min:0',
-            'items.*.discount' => 'nullable|numeric|min:0',
-        ]);
 
         // Purchase save karo
         $purchase = Purchase::create([
@@ -71,8 +61,19 @@ class PurchaseController extends Controller
                 'total' => $itemTotal,
             ]);
 
-            Product::find($item['product_id'])
-                ->increment('stock', $item['quantity']);
+            $product = Product::find($item['product_id']);
+            $stockBefore = $product->stock;
+
+            $product->increment('stock', $item['quantity']);
+
+            Stock::create([
+                'product_id' => $product->id,
+                'type' => 'purchase',
+                'direction' => 'in',
+                'quantity' => $item['quantity'],
+                'stock_before' => $stockBefore,
+                'stock_after' => $stockBefore + $item['quantity'],
+            ]);
         }
 
         $purchase->update([

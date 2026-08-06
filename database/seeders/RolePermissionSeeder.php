@@ -56,6 +56,10 @@ class RolePermissionSeeder extends Seeder
 
             // Reports
             'view-reports',
+            
+            // stocks
+            'view-stocks',
+            'adjust-stock',
         ];
 
         foreach ($permissions as $permission) {
@@ -83,7 +87,8 @@ class RolePermissionSeeder extends Seeder
             'delete-customer', 'view-customer',
             'create-purchase', 'view-purchase',
             'create-sale', 'view-sale',
-            'view-reports',
+            'view-reports','view-stocks',
+            'adjust-stock',
         ]);
 
         // Staff ko sirf basic permissions
@@ -91,6 +96,8 @@ class RolePermissionSeeder extends Seeder
             'view-product',
             'create-customer', 'edit-customer',
             'create-sale', 'view-own-sales',
+            'view-stocks',
+            'adjust-stock',
         ]);
     }
 }

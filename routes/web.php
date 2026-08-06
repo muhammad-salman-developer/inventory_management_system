@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\SaleController;
+use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -73,6 +75,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'update' => 'can:edit-customer',
         'destroy' => 'can:delete-customer',
     ]);
+    // stock
+    Route::get('/stocks', [StockController::class, 'index'])
+        ->middleware('can:view-stocks')
+        ->name('stocks.index');
+    Route::get('sales', [SaleController::class, 'index'])
+        ->name('sales.index')
+        ->middleware('can:view-sale');
+
+    Route::get('sales/create', [SaleController::class, 'create'])
+        ->name('sales.create')
+        ->middleware('can:create-sale');
+
+    Route::post('sales', [SaleController::class, 'store'])
+        ->name('sales.store')
+        ->middleware('can:create-sale');
+
+    Route::get('sales/{sale}', [SaleController::class, 'show'])
+        ->name('sales.show')
+        ->middleware('can:view-sale');
 });
 
-require __DIR__ . '/auth.php';
+
+require __DIR__.'/auth.php';

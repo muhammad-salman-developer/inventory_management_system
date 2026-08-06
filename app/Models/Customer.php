@@ -12,4 +12,7 @@ class Customer extends Model
         'email',
         'address',
     ];
+    public function sales(){
+        return $this->hasMany(Sale::class);
+    }
 }
