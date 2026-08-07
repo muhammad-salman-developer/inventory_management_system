@@ -9,7 +9,6 @@ use App\Models\Purchase;
 use App\Models\PurchaseItem;
 use App\Models\Stock;
 use App\Models\Supplier;
-use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
@@ -61,19 +60,35 @@ class PurchaseController extends Controller
                 'total' => $itemTotal,
             ]);
 
-            $product = Product::find($item['product_id']);
-            $stockBefore = $product->stock;
+            // $product = Product::find($item['product_id']);
+            // $stockBefore = $product->stock;
 
-            $product->increment('stock', $item['quantity']);
+            // $product->increment('stock', $item['quantity']);
 
-            Stock::create([
-                'product_id' => $product->id,
-                'type' => 'purchase',
-                'direction' => 'in',
-                'quantity' => $item['quantity'],
-                'stock_before' => $stockBefore,
-                'stock_after' => $stockBefore + $item['quantity'],
-            ]);
+            // Stock::create([
+            //     'product_id' => $product->id,
+            //     'type' => 'purchase',
+            //     'direction' => 'in',
+            //     'quantity' => $item['quantity'],
+            //     'stock_before' => $stockBefore,
+            //     'stock_after' => $stockBefore + $item['quantity'],
+            // ]);
+            // Stock sirf tab increase hoga agar status "received" hai
+            if ($purchase->status === 'received') {
+                $product = Product::find($item['product_id']);
+                $stockBefore = $product->stock;
+
+                $product->increment('stock', $item['quantity']);
+
+                Stock::create([
+                    'product_id' => $product->id,
+                    'type' => 'purchase',
+                    'direction' => 'in',
+                    'quantity' => $item['quantity'],
+                    'stock_before' => $stockBefore,
+                    'stock_after' => $stockBefore + $item['quantity'],
+                ]);
+            }
         }
 
         $purchase->update([

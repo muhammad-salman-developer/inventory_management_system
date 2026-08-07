@@ -13,7 +13,7 @@ class RolePermissionSeeder extends Seeder
      */
     public function run()
     {
-        // ✅ STEP 1: Pehle saari permissions banao
+        //  STEP 1: firstly all permissions create
         $permissions = [
             // Products
             'create-product',
@@ -66,16 +66,16 @@ class RolePermissionSeeder extends Seeder
             Permission::updateOrInsert(['name' => $permission], ['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // ✅ STEP 2: Phir Roles banao
+        //  STEP 2: create Roles 
         $admin = Role::updateOrCreate(['name' => 'admin'], ['name' => 'admin']);
         $manager = Role::updateOrCreate(['name' => 'manager'], ['name' => 'manager']);
         $staff = Role::updateOrCreate(['name' => 'staff'], ['name' => 'staff']);
 
-        // ✅ STEP 3: Phir Roles ko Permissions assign karo
-        // Admin ko sab permissions
+        //  STEP 3: then apply Roles to assign Permissions 
+        // Admin  permissions
         $admin->givePermissionTo(Permission::all());
 
-        // Manager ko limited permissions
+        // Manager permissions
         $manager->givePermissionTo([
             'create-product', 'edit-product',
             'delete-product', 'view-product',
@@ -91,7 +91,7 @@ class RolePermissionSeeder extends Seeder
             'adjust-stock',
         ]);
 
-        // Staff ko sirf basic permissions
+        // Staff permissions 
         $staff->givePermissionTo([
             'view-product',
             'create-customer', 'edit-customer',

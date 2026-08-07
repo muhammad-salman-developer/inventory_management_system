@@ -16,7 +16,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('admin.pages.profile.profile-edit', [
             'user' => $request->user(),
         ]);
     }
@@ -34,9 +34,33 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('admin.profile.edit')->with('status', 'profile-updated');
+    }
+/**
+ * Sirf profile image update karo (camera icon se)
+ */
+public function updateImage(Request $request): RedirectResponse
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $user = $request->user();
+
+    // Purani image delete karo (agar hai to)
+    if ($user->image && file_exists(public_path('storage/' . $user->image))) {
+        unlink(public_path('storage/' . $user->image));
     }
 
+    // Nayi image save karo
+    $path = $request->file('image')->store('profile', 'public');
+
+    $user->update([
+        'image' => $path,
+    ]);
+
+    return Redirect::route('admin.profile.edit')->with('status', 'image-updated');
+}
     /**
      * Delete the user's account.
      */

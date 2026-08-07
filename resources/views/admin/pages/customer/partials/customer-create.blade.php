@@ -56,7 +56,7 @@
                         @enderror
                     </div>
 
-                    <!-- Customer Email (Takes Full Width on desktop for balance) -->
+                    <!-- Customer Email  -->
                     <div class="col-span-1 md:col-span-2">
                         <label for="email" class="block mb-2 text-sm font-medium text-slate-700">
                             Customer Email

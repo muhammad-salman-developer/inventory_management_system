@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\SupplierController;
@@ -22,6 +23,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/image', [ProfileController::class, 'updateImage'])->name('profile.updateImage');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -94,7 +96,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sales/{sale}', [SaleController::class, 'show'])
         ->name('sales.show')
         ->middleware('can:view-sale');
+    Route::middleware(['can:view-reports'])->group(function () {
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
+        Route::get('/reports/purchases', [ReportController::class, 'purchases'])->name('reports.purchases');
+        Route::get('/reports/stock', [ReportController::class, 'stock'])->name('reports.stock');
+    });
 });
 
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
