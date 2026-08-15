@@ -41,14 +41,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     // products
     Route::resource('products', ProductController::class)
-        ->middleware([
-            'index' => 'can:view-product',
-            'store' => 'can:create-product',
-            'edit' => 'can:edit-product',
-            'update' => 'can:edit-product',
-            'destroy' => 'can:delete-product',
+        ->except(['show'])
+        ->middlewareFor('index', 'can:view-product')
+        ->middlewareFor('create', 'can:create-product')
+        ->middlewareFor('store', 'can:create-product')
+        ->middlewareFor('edit', 'can:edit-product')
+        ->middlewareFor('update', 'can:edit-product')
+        ->middlewareFor('destroy', 'can:delete-product');
+    // ->middleware([
+    //     'index' => 'can:view-product',
+    //     'store' => 'can:create-product',
+    //     'edit' => 'can:edit-product',
+    //     'update' => 'can:edit-product',
+    //     'destroy' => 'can:delete-product',
 
-        ]);
+    // ]);
+
     // suppliers
     Route::resource('suppliers', SupplierController::class)
         ->middleware([
@@ -69,18 +77,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])
             ->middleware('can:view-purchase')
             ->name('purchases.show');
-            Route::patch('/purchases/{purchase}/status', [PurchaseController::class, 'updateStatus'])
-        ->middleware('can:create-purchase')
-        ->name('purchases.updateStatus');
+        Route::patch('/purchases/{purchase}/status', [PurchaseController::class, 'updateStatus'])
+            ->middleware('can:create-purchase')
+            ->name('purchases.updateStatus');
     });
     // customer
-    Route::resource('customers', CustomerController::class)->middleware([
-        'index' => 'can:view-customer',
-        'store' => 'can:create-customer',
-        'edit' => 'can:edit-customer',
-        'update' => 'can:edit-customer',
-        'destroy' => 'can:delete-customer',
-    ]);
+    // Route::resource('customers', CustomerController::class)->middleware([
+    //     'index' => 'can:view-customer',
+    //     'store' => 'can:create-customer',
+    //     'edit' => 'can:edit-customer',
+    //     'update' => 'can:edit-customer',
+    //     'destroy' => 'can:delete-customer',
+    // ]);
+    Route::resource('customers', CustomerController::class)
+        ->middlewareFor('index', 'can:view-customer')
+        ->middlewareFor('create', 'can:create-customer')
+        ->middlewareFor('store', 'can:create-customer')
+        ->middlewareFor('edit', 'can:edit-customer')
+        ->middlewareFor('update', 'can:edit-customer')
+        ->middlewareFor('destroy', 'can:delete-customer');
     // stock
     Route::get('/stocks', [StockController::class, 'index'])
         ->middleware('can:view-stocks')
@@ -108,7 +123,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     // manage user
     Route::resource('users', UserController::class)
-    ->middleware('auth');
+        ->middleware('auth');
+
 });
 
-require __DIR__ . '/auth.php';
+
+require __DIR__.'/auth.php';

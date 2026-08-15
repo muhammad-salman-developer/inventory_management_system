@@ -56,7 +56,7 @@ class RolePermissionSeeder extends Seeder
 
             // Reports
             'view-reports',
-            
+
             // stocks
             'view-stocks',
             'adjust-stock',
@@ -66,12 +66,12 @@ class RolePermissionSeeder extends Seeder
             Permission::updateOrInsert(['name' => $permission], ['name' => $permission, 'guard_name' => 'web']);
         }
 
-        //  STEP 2: create Roles 
+        //  STEP 2: create Roles
         $admin = Role::updateOrCreate(['name' => 'admin'], ['name' => 'admin']);
         $manager = Role::updateOrCreate(['name' => 'manager'], ['name' => 'manager']);
         $staff = Role::updateOrCreate(['name' => 'staff'], ['name' => 'staff']);
 
-        //  STEP 3: then apply Roles to assign Permissions 
+        //  STEP 3: then apply Roles to assign Permissions
         // Admin  permissions
         $admin->givePermissionTo(Permission::all());
 
@@ -87,15 +87,15 @@ class RolePermissionSeeder extends Seeder
             'delete-customer', 'view-customer',
             'create-purchase', 'view-purchase',
             'create-sale', 'view-sale',
-            'view-reports','view-stocks',
+            'view-reports', 'view-stocks',
             'adjust-stock',
         ]);
 
-        // Staff permissions 
+        // Staff permissions
         $staff->givePermissionTo([
             'view-product',
-            'create-customer', 'edit-customer',
-            'create-sale', 'view-own-sales',
+            'view-customer', 'create-customer', 'edit-customer',
+            'view-sale', 'create-sale', 'view-own-sales',
             'view-stocks',
             'adjust-stock',
         ]);
