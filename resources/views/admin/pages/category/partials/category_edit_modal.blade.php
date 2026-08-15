@@ -129,7 +129,7 @@
         const alertDiv = document.getElementById('successAlert');
 
         if (alertDiv) {
-            // Div mil gayi — update karo
+            // Div  — update 
             alertDiv.querySelector('span').innerText = message;
             alertDiv.classList.remove('hidden');
             setTimeout(() => {
@@ -141,7 +141,7 @@
             newAlert.className = 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800';
             newAlert.innerHTML = `<span class="font-medium">${message}</span>`;
 
-            // Table ke upar insert karo
+            // insert above the table
             const table = document.querySelector('table');
             table.parentNode.insertBefore(newAlert, table);
 
