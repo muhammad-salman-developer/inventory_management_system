@@ -107,7 +107,7 @@
                             </label>
                             <input type="file" name="front_images[]" id="front_images" multiple accept="image/*"
                                 class="w-full bg-white border border-slate-300 focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/20 rounded-xl px-4 py-2 text-slate-800 transition-all text-sm file:mr-4 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-medium file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
-                                required>
+                            >
                             @error('front_images')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -120,7 +120,7 @@
                             </label>
                             <input type="file" name="back_images[]" id="back_images" multiple accept="image/*"
                                 class="w-full bg-white border border-slate-300 focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/20 rounded-xl px-4 py-2 text-slate-800 transition-all text-sm file:mr-4 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-medium file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
-                                required>
+                                >
                             @error('back_images')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror

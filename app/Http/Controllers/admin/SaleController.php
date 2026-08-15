@@ -8,12 +8,14 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Stock;
+use App\Http\Requests\Admin\SaleRequest;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
-    // ✅ Sales List
+    //  Sales List
     public function index()
     {
         $query = Sale::with(['customer', 'user', 'items.product']);
@@ -29,7 +31,7 @@ class SaleController extends Controller
         return view('admin.pages.sales.index', compact('sales'));
     }
 
-    // ✅ Sale Create Form
+    //  Sale Create Form
     public function create()
     {
         $customers = Customer::select('id', 'name', 'phone')->get();
@@ -38,7 +40,7 @@ class SaleController extends Controller
             ->select('id', 'name', 'price', 'stock')
             ->get();
 
-        // Blade ke liye pehle se tayyar (simple) array
+     
         $productsForJs = $products->map(function ($p) {
             return [
                 'id' => $p->id,
@@ -51,20 +53,9 @@ class SaleController extends Controller
         return view('admin.pages.sales.create', compact('customers', 'products', 'productsForJs'));
     }
 
-    // ✅ Sale Save
-    public function store(Request $request)
+    //  Sale Save
+    public function store(SaleRequest $request)
     {
-        $request->validate([
-            'customer_id' => 'required|exists:customers,id',
-            'date' => 'required|date',
-            'tax' => 'nullable|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0',
-            'items' => 'required|array|min:1',
-            'items.*.product_id' => 'required|exists:products,id',
-            'items.*.quantity' => 'required|integer|min:1',
-            'items.*.unit_price' => 'required|numeric|min:0',
-        ]);
-
         // Stock check karo
         foreach ($request->items as $item) {
             $product = Product::find($item['product_id']);
@@ -78,7 +69,6 @@ class SaleController extends Controller
         }
 
         DB::transaction(function () use ($request) {
-
             $invoiceNumber = 'INV-'.date('Y').'-'.str_pad(
                 Sale::count() + 1, 4, '0', STR_PAD_LEFT
             );
@@ -110,7 +100,6 @@ class SaleController extends Controller
 
                 $product = Product::find($item['product_id']);
                 $stockBefore = $product->stock;
-
                 $product->decrement('stock', $item['quantity']);
 
                 Stock::create([
@@ -135,7 +124,6 @@ class SaleController extends Controller
     public function show(Sale $sale)
     {
         $sale->load(['customer', 'user', 'items.product']);
-
         return view('admin.pages.sales.show', compact('sale'));
     }
 }

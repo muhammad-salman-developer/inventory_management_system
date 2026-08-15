@@ -69,8 +69,8 @@
                         <label class="block mb-2 text-sm font-medium text-slate-700">Status</label>
                         <select name="status"
                             class="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all bg-white">
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
+                            <option value="pending" selected>Pending</option>
+                            <option value="cancelled">Cancelled</option>
                             <option value="received">Received</option>
                         </select>
                     </div>
@@ -197,57 +197,57 @@
         // Naya item row add 
         document.getElementById('addItemBtn').addEventListener('click', function () {
             let row = `
-                                            <tr class="hover:bg-slate-50/50 transition-colors">
-                                                <td class="p-4">
-                                                    <select name="items[${itemIndex}][product_id]"
-                                                        class="w-full border border-slate-300 rounded-lg px-3 py-2">
-                                                        <option value="">Select Product</option>
-                                                        @foreach ($products as $product)
-                                                            <option value="{{ $product->id }}">
-                                                                {{ $product->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </td>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="p-4">
+                                                        <select name="items[${itemIndex}][product_id]"
+                                                            class="w-full border border-slate-300 rounded-lg px-3 py-2">
+                                                            <option value="">Select Product</option>
+                                                            @foreach ($products as $product)
+                                                                <option value="{{ $product->id }}">
+                                                                    {{ $product->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
 
-                                                <td class="p-4">
-                                                    <input type="number"
-                                                        name="items[${itemIndex}][quantity]"
-                                                        class="quantity w-full border rounded-lg px-3 py-2">
-                                                </td>
+                                                    <td class="p-4">
+                                                        <input type="number"
+                                                            name="items[${itemIndex}][quantity]"
+                                                            class="quantity w-full border rounded-lg px-3 py-2">
+                                                    </td>
 
-                                                <td class="p-4">
-                                                    <input type="number"
-                                                        name="items[${itemIndex}][unit_price]"
-                                                        class="unit_price w-full border rounded-lg px-3 py-2">
-                                                </td>
+                                                    <td class="p-4">
+                                                        <input type="number"
+                                                            name="items[${itemIndex}][unit_price]"
+                                                            class="unit_price w-full border rounded-lg px-3 py-2">
+                                                    </td>
 
-                                                <td class="p-4">
-                                                    <input type="number"
-                                                        name="items[${itemIndex}][tax]"
-                                                        class="tax w-full border rounded-lg px-3 py-2">
-                                                </td>
+                                                    <td class="p-4">
+                                                        <input type="number"
+                                                            name="items[${itemIndex}][tax]"
+                                                            class="tax w-full border rounded-lg px-3 py-2">
+                                                    </td>
 
-                                                <td class="p-4">
-                                                    <input type="number"
-                                                        name="items[${itemIndex}][discount]"
-                                                        class="discount w-full border rounded-lg px-3 py-2">
-                                                </td>
+                                                    <td class="p-4">
+                                                        <input type="number"
+                                                            name="items[${itemIndex}][discount]"
+                                                            class="discount w-full border rounded-lg px-3 py-2">
+                                                    </td>
 
-                                                <td class="p-4">
-                                                    <input type="number"
-                                                        name="items[${itemIndex}][total]"
-                                                        readonly
-                                                        class="item_total w-full bg-slate-50 border rounded-lg px-3 py-2">
-                                                </td>
-                                                <td class="p-4">
-                                                    <button type="button" class="removeItem text-red-500 hover:text-red-700">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </button>
-                                                </td>
+                                                    <td class="p-4">
+                                                        <input type="number"
+                                                            name="items[${itemIndex}][total]"
+                                                            readonly
+                                                            class="item_total w-full bg-slate-50 border rounded-lg px-3 py-2">
+                                                    </td>
+                                                    <td class="p-4">
+                                                        <button type="button" class="removeItem text-red-500 hover:text-red-700">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </td>
 
-                                            </tr>
-                                            `;
+                                                </tr>
+                                                `;
             document.getElementById('itemBody')
                 .insertAdjacentHTML('beforeend', row);
             itemIndex++;

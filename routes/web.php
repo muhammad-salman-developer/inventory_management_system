@@ -9,11 +9,12 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('web.pages.index');
 });
 
 // Route::get('/dashboard', function () {
@@ -68,6 +69,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])
             ->middleware('can:view-purchase')
             ->name('purchases.show');
+            Route::patch('/purchases/{purchase}/status', [PurchaseController::class, 'updateStatus'])
+        ->middleware('can:create-purchase')
+        ->name('purchases.updateStatus');
     });
     // customer
     Route::resource('customers', CustomerController::class)->middleware([
@@ -102,6 +106,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/reports/purchases', [ReportController::class, 'purchases'])->name('reports.purchases');
         Route::get('/reports/stock', [ReportController::class, 'stock'])->name('reports.stock');
     });
+    // manage user
+    Route::resource('users', UserController::class)
+    ->middleware('auth');
 });
 
 require __DIR__ . '/auth.php';

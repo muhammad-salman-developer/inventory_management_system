@@ -10,7 +10,8 @@
                 <a type="button" href="{{ route('purchases.create') }}"
                     class="text-white !bg-cyan-600 font-medium rounded-lg text-sm px-4 py-2.5 text-center leading-5">
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
                     </svg>
                     Add Purchase
@@ -30,31 +31,31 @@
                     <thead class="align-bottom">
                         <tr>
                             <th
-                                class="px-6 py-3 font-bold text-left capitalize align-middle bg-transparent  shadow-none text-xl  tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                class="px-6 py-3 font-bold text-left capitalize align-middle bg-transparent  shadow-none text-lg  tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 id</th>
                             <th
-                                class="px-6 py-3 pl-2 font-bold text-left capitalize align-middle bg-transparent  shadow-none text-xl  tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                class="px-6 py-3 pl-2 font-bold text-left capitalize align-middle bg-transparent  shadow-none text-lg  tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 supplier</th>
                             <th
-                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent  shadow-none text-xl  tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent  shadow-none text-lg  tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 date </th>
                             <th
-                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent shadow-none text-xl tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent shadow-none text-lg tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 Tax
                             </th>
 
                             <th
-                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent shadow-none text-xl tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent shadow-none text-lg tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 Discount
                             </th>
                             <th
-                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent  border-gray-200 shadow-none text-xl  tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent  border-gray-200 shadow-none text-lg  tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 total_amount</th>
                             <th
-                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent   shadow-none text-xl  tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent   shadow-none text-lg  tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 status</th>
                             <th
-                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent  shadow-none text-xl  tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                class="px-6 py-3 font-bold text-center capitalize align-middle bg-transparent  shadow-none text-lg  tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 action</th>
                         </tr>
                     </thead>
@@ -90,28 +91,52 @@
 
                                 <td class="p-2 text-center align-middle whitespace-nowrap">
                                     @if ($purchase->status == 'pending')
-                                        <span
-                                            class="px-3 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">
+                                        <span class="px-3 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">
                                             Pending
                                         </span>
-                                    @elseif ($purchase->status == 'approved')
-                                        <span
-                                            class="px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">
-                                            Approved
+                                    @elseif ($purchase->status == 'cancelled')
+                                        <span class="px-3 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">
+                                            Cancelled
                                         </span>
                                     @elseif ($purchase->status == 'received')
-                                        <span
-                                            class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
+                                        <span class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
                                             Received
                                         </span>
                                     @endif
                                 </td>
-                                <td class="p-2 align-middle bg-transparent  whitespace-nowrap shadow-transparent">
-                                    <div class="flex justify-center gap-2">
-                                        <a type="button" href="{{ route('purchases.show', $purchase->id) }}"
-                                            class="!bg-green-600 text-white font-medium hover:bg-green-700 py-1 px-3 rounded">
+                                <td class="p-2 text-center align-middle whitespace-nowrap">
+                                    <div class="flex items-center justify-center gap-2">
+
+                                        <a href="{{ route('purchases.show', $purchase->id) }}"
+                                            class="px-3 py-1 text-xs font-semibold text-white bg-gray-600 rounded-md hover:bg-gray-700">
                                             View
                                         </a>
+
+                                        @if ($purchase->status == 'pending')
+                                            <form action="{{ route('purchases.updateStatus', $purchase->id) }}" method="POST"
+                                                onsubmit="return confirm('Mal receive ho gaya hai? Ye stock ko increase kar dega.')">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="received">
+                                                <button type="submit"
+                                                    class="px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-md hover:bg-green-700">
+                                                    Mark as Received
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ route('purchases.updateStatus', $purchase->id) }}" method="POST"
+                                                onsubmit="return confirm('Is purchase ko cancel karna hai?')">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="cancelled">
+                                                <button type="submit"
+                                                    class="px-3 py-1 text-xs font-semibold text-white bg-red-500 rounded-md hover:bg-red-600">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                    </div>
                                 </td>
                             </tr>
 

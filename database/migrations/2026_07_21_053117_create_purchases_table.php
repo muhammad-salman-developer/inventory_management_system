@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('discount');
             $table->date('date');
             $table->decimal('total_amount', 10, 2)->default(0);
-            $table->enum('status', ['pending', 'approved', 'received'])->default('pending');
+            $table->enum('status', ['pending', 'cancelled', 'received'])->default('pending');
             $table->timestamps();
         });
     }
