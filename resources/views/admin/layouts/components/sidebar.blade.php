@@ -123,7 +123,7 @@
                         href="{{ route('sales.index') }}">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-cyan-600 fa-solid fa-warehouse"></i>
+                            <i class="relative top-0 text-sm leading-normal text-cyan-600 fa-solid fa-cart-shopping"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sale</span>
                     </a>
@@ -137,7 +137,7 @@
                         href="{{ route('reports.index') }}">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-cyan-600 fa-solid fa-warehouse"></i>
+                            <i class="relative top-0 text-sm leading-normal text-cyan-600 fa-solid fa-chart-column"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Reports</span>
                     </a>
