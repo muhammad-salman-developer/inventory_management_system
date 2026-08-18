@@ -8,12 +8,6 @@ use Illuminate\Http\RedirectResponse;
 
 class NotificationController extends Controller
 {
-     public function index()
-    {
-        $notifications = auth()->user()->notifications()->paginate(15);
-
-        return view('notifications.index', compact('notifications'));
-    }
      public function markAsRead(string $id): RedirectResponse
     {
         $notification = auth()->user()->notifications()->findOrFail($id);

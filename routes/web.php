@@ -127,7 +127,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('auth');
 
     Route::middleware('auth')->group(function () {
-        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
         Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
         Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
     });

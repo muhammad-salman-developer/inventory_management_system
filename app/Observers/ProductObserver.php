@@ -23,7 +23,6 @@ class ProductObserver
     public function updated(Product $product): void
     {
         if ($product->isDirty('stock') && $product->stock < $this->threshold) {
-            // Spatie Permission ka method - role name se users nikalna
             $users = User::role(['admin', 'manager'])->get();
 
             foreach ($users as $user) {
