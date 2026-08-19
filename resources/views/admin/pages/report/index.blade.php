@@ -56,7 +56,8 @@
                     {{ $stockSummary['total_products'] }} Products
                 </h3>
                 <p class="text-xs text-slate-400 mt-1">
-                    {{ $stockSummary['low_stock'] }} low stock &middot; value {{ number_format($stockSummary['total_value'], 2) }}
+                    {{ $stockSummary['low_stock'] }} low stock &middot; value
+                    {{ number_format($stockSummary['total_value'], 2) }}
                 </p>
             </button>
 
@@ -90,7 +91,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="p-6 text-center text-slate-400">Koi sales record nahi mila.</td>
+                                    <td colspan="4" class="p-6 text-center text-slate-400">No sales record found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -125,7 +126,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="p-6 text-center text-slate-400">Koi purchase record nahi mila.</td>
+                                    <td colspan="5" class="p-6 text-center text-slate-400">No purchase record found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -156,8 +157,9 @@
                                     <td class="p-4">{{ $product->category->name ?? 'N/A' }}</td>
                                     <td class="p-4">{{ number_format($product->price, 2) }}</td>
                                     <td class="p-4">
-                                        <span class="px-2 py-1 rounded-lg text-xs font-medium
-                                            {{ $product->stock <= 5 ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600' }}">
+                                        <span
+                                            class="px-2 py-1 rounded-lg text-xs font-medium
+                                                    {{ $product->stock <= 5 ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600' }}">
                                             {{ $product->stock }}
                                         </span>
                                     </td>
@@ -165,7 +167,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="p-6 text-center text-slate-400">Koi product nahi mila.</td>
+                                    <td colspan="5" class="p-6 text-center text-slate-400">No product found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -178,14 +180,14 @@
 
     <script>
         function switchReportTab(tab) {
-            // Sab tabs hide karo
+            // all tabs hide 
             document.querySelectorAll('.report-tab').forEach(el => el.classList.add('hidden'));
-            // Selected tab dikhao
+            // Selected tab show
             document.getElementById('tab-' + tab).classList.remove('hidden');
 
-            // Sab cards se active ring hatao
+            // all cards remove active ring
             document.querySelectorAll('.report-card').forEach(el => el.classList.remove('ring-2', 'ring-cyan-500'));
-            // Selected card pe ring lagao
+            // Selected card apply active ring
             document.getElementById('card-' + tab).classList.add('ring-2', 'ring-cyan-500');
         }
     </script>

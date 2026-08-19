@@ -66,22 +66,22 @@
           </div>
 
         </div>
-        <li class="flex items-center px-4">
+        {{-- <li class="flex items-center px-4">
           <a href="javascript:;" class="p-0 text-sm  transition-all ease-nav-brand">
             <i fixed-plugin-button-nav class="cursor-pointer fa fa-cog"></i>
             <!-- fixed-plugin-button-nav  -->
           </a>
-        </li>
+        </li> --}}
 
         <!-- notifications -->
-        <li class="relative flex items-center pr-2 group">
+        <li class="relative flex items-center ms-3 group">
           <p class="hidden transform-dropdown-show"></p>
           <a href="javascript:;" class="block p-0 text-sm relative transition-all ease-nav-brand" aria-expanded="false">
             <i class="cursor-pointer fa fa-bell"></i>
 
             @if(auth()->user()->unreadNotifications->count() > 0)
               <span
-                class="absolute -top-1 -right-1 bg-red-500  text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                class="absolute -top-1 -right-1 bg-red-500 text-white  text-xs rounded-full w-4 h-4 flex items-center justify-center">
                 {{ auth()->user()->unreadNotifications->count() }}
               </span>
             @endif

@@ -17,7 +17,6 @@ class PurchaseController extends Controller
     public function index()
     {
         $purchases = Purchase::with('supplier')->latest()->paginate(15);
-
         return view('admin.pages.purchase.index', compact('purchases'));
     }
 
@@ -25,7 +24,6 @@ class PurchaseController extends Controller
     {
         $suppliers = Supplier::all();
         $products = Product::all();
-
         return view('admin.pages.purchase.create', compact('suppliers', 'products'));
     }
 
@@ -33,27 +31,24 @@ class PurchaseController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Purchase save karo
+            // Purchase save 
             $purchase = Purchase::create([
                 'supplier_id' => $request->supplier_id,
                 'date' => $request->date,
                 'tax' => $request->tax ?? 0,
                 'discount' => $request->discount ?? 0,
                 'total_amount' => 0,
-                'status' => $request->status ?? 'pending', // YE MISSING THA
+                'status' => $request->status ?? 'pending', 
             ]);
 
             $totalAmount = 0;
 
             foreach ($request->items as $item) {
-
                 $subTotal = $item['quantity'] * $item['unit_price'];
                 $taxAmount = $item['tax'] ?? 0;
                 $discount = $item['discount'] ?? 0;
                 $itemTotal = $subTotal + $taxAmount - $discount;
-
                 $totalAmount += $itemTotal;
-
                 PurchaseItem::create([
                     'purchase_id' => $purchase->id,
                     'product_id' => $item['product_id'],
@@ -63,14 +58,10 @@ class PurchaseController extends Controller
                     'discount' => $discount,
                     'total' => $itemTotal,
                 ]);
-
-                // Sirf tab stock increase hogi agar status "received" hai
                 if ($purchase->status === 'received') {
                     $product = Product::find($item['product_id']);
                     $stockBefore = $product->stock;
-
                     $product->increment('stock', $item['quantity']);
-
                     Stock::create([
                         'product_id' => $product->id,
                         'type' => 'purchase',
@@ -125,15 +116,11 @@ class PurchaseController extends Controller
         DB::beginTransaction();
         try {
             $purchase->load('items.product');
-
-            // Kisi bhi status se "received" mein gaya -> Stock ADD
             if ($oldStatus !== 'received' && $newStatus === 'received') {
                 foreach ($purchase->items as $item) {
                     $product = $item->product;
                     $stockBefore = $product->stock;
-
                     $product->increment('stock', $item->quantity);
-
                     Stock::create([
                         'product_id' => $product->id,
                         'type' => 'purchase',
@@ -144,15 +131,11 @@ class PurchaseController extends Controller
                     ]);
                 }
             }
-
-            // "received" se kisi aur status mein gaya -> Stock REVERSE
             if ($oldStatus === 'received' && $newStatus !== 'received') {
                 foreach ($purchase->items as $item) {
                     $product = $item->product;
                     $stockBefore = $product->stock;
-
                     $product->decrement('stock', $item->quantity);
-
                     Stock::create([
                         'product_id' => $product->id,
                         'type' => 'purchase',
@@ -165,14 +148,11 @@ class PurchaseController extends Controller
             }
 
             $purchase->update(['status' => $newStatus]);
-
             DB::commit();
-
             return back()->with('success', 'Purchase status updated to '.ucfirst($newStatus));
 
         } catch (\Exception $e) {
             DB::rollBack();
-
             return back()->with('error', 'Something went wrong: '.$e->getMessage());
         }
     }
