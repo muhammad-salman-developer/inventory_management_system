@@ -157,7 +157,7 @@
 
                     {{-- Save Button --}}
                     <button type="submit"
-                        class="px-6 py-2.5 text-sm font-medium text-white bg-cyan-600 rounded-xl hover:bg-cyan-700 shadow-md shadow-cyan-600/10">
+                        class="px-6 py-2.5 text-sm font-medium text-white !bg-cyan-600 rounded-xl hover:bg-cyan-700 shadow-md shadow-cyan-600/10">
 
                         <i class="fa-solid fa-check mr-1"></i>
                         Save User
