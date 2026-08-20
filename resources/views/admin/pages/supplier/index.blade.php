@@ -6,7 +6,7 @@
         <div
             class="p-6 pb-0 mb-0 bg-white rounded-t-2xl flex justify-between items-center border-b-0 border-b-solid rounded-b-2xl">
             <h6>Supplier Table</h6>
-           
+
             <!-- Modal toggle -->
             @can('create-supplier')
                 <button data-modal-target="supplier-modal" data-modal-toggle="supplier-modal" type="button"
@@ -36,7 +36,7 @@
                             <th
                                 class="px-6 py-3 pl-2 font-bold text-left capitalize align-middle bg-transparent border-b border-gray-200 shadow-none text-lg border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 name</th>
-                                <th
+                            <th
                                 class="px-6 py-3 pl-2 font-bold text-left capitalize align-middle bg-transparent border-b border-gray-200 shadow-none text-lg border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                 email</th>
                             <th
@@ -57,46 +57,52 @@
                     <tbody>
                         @forelse ($suppliers as $supplier)
                             <tr>
-                                <td class="px-6 py-3 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent" >
+                                <td class="px-6 py-3 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     {{ $supplier->id }}
                                 </td>
                                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent"
                                     id="supplierName_{{ $supplier->id }}">
                                     {{ $supplier->name }}
                                 </td>
-                                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent"  id="supplierEmail_{{ $supplier->id }}">
+                                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent"
+                                    id="supplierEmail_{{ $supplier->id }}">
                                     {{ $supplier->email }}
                                 </td>
 
-                                <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent" id="supplierContact_{{ $supplier->id }}">
-                                            {{ $supplier->contact }}
-                                            </td>
-                                             <td
-                                            class=" p-2 leading-normal text-center align-middle bg-transparent border-b text-sm
-                                    whitespace-nowrap shadow-transparent" id="supplierAddress_{{ $supplier->id }}">
-                                            {{ $supplier->address }}
-                                            </td>
-                                             <td
-                                            class=" p-2 leading-normal text-center align-middle bg-transparent border-b text-sm
-                                    whitespace-nowrap shadow-transparent" id="supplierStatus_{{ $supplier->id }}">
-                                            {{ $supplier->status }}
-                                            </td>
+                                <td class="p-2 leading-normal text-center align-middle bg-transparent    border-b text-sm whitespace-nowrap shadow-transparent"
+                                    id="supplierContact_{{ $supplier->id }}">
+                                    {{ $supplier->contact }}
+                                </td>
+                                <td class=" p-2 leading-normal text-center align-middle bg-transparent border-b text-sm
+                                                    whitespace-nowrap shadow-transparent"
+                                    id="supplierAddress_{{ $supplier->id }}">
+                                    {{ $supplier->address }}
+                                </td>
+                                <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent"
+                                    id="supplierStatus_{{ $supplier->id }}">
 
-                                        <td
-                                            class=" p-2 align-middle bg-transparent border-b whitespace-nowrap
-                                    shadow-transparent">
+                                    @if ($supplier->status)
+                                        <span class="text-green-600">Active</span>
+                                    @else
+                                        <span class="text-red-600">Inactive</span>
+                                    @endif
+
+                                </td>
+
+                                <td class=" p-2 align-middle bg-transparent border-b whitespace-nowrap
+                                                    shadow-transparent">
                                     <div class="flex justify-center gap-2">
                                         @can('edit-supplier')
                                             {{-- <a href="{{ route('categories.edit', $category->id) }}" data-name="{{ $cate }}"
                                                 class="font-medium text-white bg-blue-600 hover:bg-blue-700 py-1 px-3 rounded">Edit</a>
                                             --}}
                                             <button type="button" onclick="openSupplierEditModal('{{ $supplier->id }}',
-                                                            '{{ $supplier->name }}',
-                                                            '{{ $supplier->email }}',
-                                                            '{{ $supplier->contact }}',
-                                                            '{{ $supplier->address }}',
-                                                            '{{ $supplier->status }}'
-                                                            )"
+                                                                        '{{ $supplier->name }}',
+                                                                        '{{ $supplier->email }}',
+                                                                        '{{ $supplier->contact }}',
+                                                                        '{{ $supplier->address }}',
+                                                                        '{{ $supplier->status }}'
+                                                                        )"
                                                 class="font-medium text-white !bg-blue-600 hover:bg-blue-700 py-1 px-3 rounded">
                                                 Edit
                                             </button>

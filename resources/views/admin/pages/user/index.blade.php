@@ -2,7 +2,7 @@
 @section('title', 'Manage Users')
 @section('main')
     <div
-        class="relative flex flex-col w-full min-w-0 mb-0 break-words bg-white border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border max-w-5xl m-auto">
+        class="relative flex flex-col w-full min-w-0 mb-0 break-words bg-white border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border max-w-4xl m-auto">
 
         <div class="p-6 pb-4 mb-0 bg-white rounded-t-2xl flex items-center justify-between border-b border-slate-100">
             <h6 class="text-base font-semibold text-slate-800 m-0">Users Table</h6>
