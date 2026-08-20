@@ -133,8 +133,7 @@
     </div>
 
     <script>
-    const products = @json($productsForJs);
-
+        const products = @json($productsForJs);
 
         let itemIndex = 0;
 
@@ -151,28 +150,30 @@
             const row = document.createElement('tr');
             row.classList.add('border-b');
             row.innerHTML = `
-                        <td class="p-2">
-                            <select name="items[${itemIndex}][product_id]" class="product-select w-full border border-gray-300 rounded-lg text-sm p-2" required>
-                                ${productOptions()}
-                            </select>
-                        </td>
-                        <td class="p-2 text-center stock-display text-sm text-slate-500">-</td>
-                        <td class="p-2">
-                            <input type="number" name="items[${itemIndex}][quantity]" min="1" value="1"
-                                class="qty-input w-full border border-gray-300 rounded-lg text-sm p-2 text-center" required>
-                        </td>
-                        <td class="p-2">
-                            <input type="number" step="0.01" name="items[${itemIndex}][unit_price]"
-                                class="price-input w-full border border-gray-300 rounded-lg text-sm p-2 text-right" required>
-                        </td>
-                        <td class="p-2 text-right subtotal-display text-sm font-medium">Rs. 0.00</td>
-                        <td class="p-2 text-center">
-                            <button type="button" class="removeItemBtn text-red-500 font-medium text-sm">✕</button>
-                        </td>
-                    `;
+                                <td class="p-2">
+                                    <select name="items[${itemIndex}][product_id]" class="product-select w-full border border-gray-300 rounded-lg text-sm p-2" required>
+                                        ${productOptions()}
+                                    </select>
+                                </td>
+                                <td class="p-2 text-center stock-display text-sm text-slate-500">-</td>
+                                <td class="p-2">
+                                    <input type="number" name="items[${itemIndex}][quantity]" min="1" value="1"
+                                        class="qty-input w-full border border-gray-300 rounded-lg text-sm p-2 text-center" required>
+                                </td>
+                                <td class="p-2">
+                                    <input type="number" step="0.01" name="items[${itemIndex}][unit_price]"
+                                        class="price-input w-full border border-gray-300 rounded-lg text-sm p-2 text-right" required>
+                                </td>
+                                <td class="p-2 text-right subtotal-display text-sm font-medium">Rs. 0.00</td>
+                                <td class="p-2 text-center">
+                                    <button type="button" class="removeItemBtn text-red-500 font-medium text-sm">✕</button>
+                                </td>
+                            `;
             tbody.appendChild(row);
             itemIndex++;
             bindRowEvents(row);
+
+            updateProductOptions();
         }
 
         function bindRowEvents(row) {
@@ -190,6 +191,8 @@
                 stockDisplay.textContent = stock;
                 qtyInput.max = stock;
                 calculateRow(row);
+
+                updateProductOptions();
             });
 
             [qtyInput, priceInput].forEach(el => el.addEventListener('input', () => calculateRow(row)));
@@ -197,6 +200,8 @@
             removeBtn.addEventListener('click', function () {
                 row.remove();
                 calculateGrandTotal();
+
+                updateProductOptions();
             });
         }
 
@@ -206,6 +211,30 @@
             const subtotal = qty * price;
             row.querySelector('.subtotal-display').textContent = 'Rs. ' + subtotal.toFixed(2);
             calculateGrandTotal();
+        }
+
+        function updateProductOptions() {
+            let selectedProducts = [];
+
+            document.querySelectorAll('select[name^="items"][name$="[product_id]"]').forEach(select => {
+                if (select.value) {
+                    selectedProducts.push(select.value);
+                }
+            });
+
+            document.querySelectorAll('select[name^="items"][name$="[product_id]"]').forEach(select => {
+                let currentValue = select.value;
+
+                select.querySelectorAll('option').forEach(option => {
+                    if (option.value === '') return;
+
+                    if (selectedProducts.includes(option.value) && option.value !== currentValue) {
+                        option.disabled = true;
+                    } else {
+                        option.disabled = false;
+                    }
+                });
+            });
         }
 
         function calculateGrandTotal() {
@@ -227,7 +256,6 @@
         document.getElementById('taxInput').addEventListener('input', calculateGrandTotal);
         document.getElementById('discountInput').addEventListener('input', calculateGrandTotal);
 
-        // Page load par ek row already add ho jaye
         document.addEventListener('DOMContentLoaded', () => addItemRow());
     </script>
 

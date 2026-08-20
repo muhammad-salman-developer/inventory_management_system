@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
@@ -29,14 +30,8 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
-        $request->validate([
-            'name' => 'string|required|max:255',
-            'phone' => 'string|required|max:255',
-            'email' => 'string|nullable|max:255',
-            'address' => 'string|nullable|max:255',
-        ]);
         Customer::create([
             'name' => $request->name,
             'phone' => $request->phone,
@@ -67,17 +62,9 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerRequest $request, string $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'address' => 'nullable|string|max:255',
-        ]);
-
         $customer = Customer::findOrFail($id);
-
         $customer->update([
             'name' => $request->name,
             'phone' => $request->phone,

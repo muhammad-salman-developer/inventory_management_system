@@ -99,7 +99,6 @@ class PurchaseController extends Controller
         return view('admin.pages.purchase.show', compact('purchase'));
     }
 
-    // YE METHOD MISSING THA - add karna zaroori hai
     public function updateStatus(Request $request, Purchase $purchase)
     {
         $request->validate([

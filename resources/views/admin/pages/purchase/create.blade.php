@@ -194,8 +194,8 @@
     <script>
         let itemIndex = 1;
 
-        // Naya item row add 
-        document.getElementById('addItemBtn').addEventListener('click', function() {
+        // Naya item row add karna
+        document.getElementById('addItemBtn').addEventListener('click', function () {
             let row = `
             <tr class="hover:bg-slate-50/50 transition-colors">
                 <td class="p-4">
@@ -245,23 +245,29 @@
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </td>
-
             </tr>
             `;
-            document.getElementById('itemBody')
-                .insertAdjacentHTML('beforeend', row);
+            document.getElementById('itemBody').insertAdjacentHTML('beforeend', row);
             itemIndex++;
+
+            // NAYA: naya row add hone ke baad product dropdown update karo
+            updateProductOptions();
         });
 
-        // Row remove  + sub total update
-        document.addEventListener('click', function(e) {
+        // Row remove karna + sub total update
+        document.addEventListener('click', function (e) {
             if (e.target.closest('.removeItem')) {
                 let row = e.target.closest('tr');
                 row.remove();
                 calculateGrandTotal();
+
+                // NAYA: row remove hone ke baad dropdown wapis se update karo
+                updateProductOptions();
             }
         });
-        document.addEventListener('input', function(e) {
+
+        // Quantity, unit price, tax, discount change hone par row total calculate karna
+        document.addEventListener('input', function (e) {
             if (
                 e.target.classList.contains('quantity') ||
                 e.target.classList.contains('unit_price') ||
@@ -288,20 +294,39 @@
             }
         });
 
-        // Sab items ke total ko jama kar ke Sub Total field mein dikhana
-        function calculateGrandTotal() {
-            let rows = document.querySelectorAll('#itemBody tr');
-            let grandTotal = 0;
+        // NAYA: jab bhi koi product dropdown se select ho, baaki dropdowns update karo
+        document.addEventListener('change', function (e) {
+            if (e.target.matches('select[name^="items"][name$="[product_id]"]')) {
+                updateProductOptions();
+            }
+        });
 
-            rows.forEach(row => {
-                let itemTotal = Number(row.querySelector('.item_total')?.value) || 0;
-                grandTotal += itemTotal;
+        // NAYA FUNCTION: already selected products ko baaki dropdowns mein disable karna
+        function updateProductOptions() {
+            let selectedProducts = [];
+
+            document.querySelectorAll('select[name^="items"][name$="[product_id]"]').forEach(select => {
+                if (select.value) {
+                    selectedProducts.push(select.value);
+                }
             });
 
-            let purchaseTotalField = document.getElementById('purchaseTotal');
-            if (purchaseTotalField) purchaseTotalField.value = grandTotal.toFixed(2);
+            document.querySelectorAll('select[name^="items"][name$="[product_id]"]').forEach(select => {
+                let currentValue = select.value;
+
+                select.querySelectorAll('option').forEach(option => {
+                    if (option.value === '') return;
+
+                    if (selectedProducts.includes(option.value) && option.value !== currentValue) {
+                        option.disabled = true;
+                    } else {
+                        option.disabled = false;
+                    }
+                });
+            });
         }
 
+        // Sab items ke total ko jama kar ke Sub Total aur Grand Total calculate karna
         function calculateGrandTotal() {
             let rows = document.querySelectorAll('#itemBody tr');
             let itemsSum = 0;
@@ -328,11 +353,12 @@
             if (grandTotalField) grandTotalField.value = grandTotal.toFixed(2);
         }
 
-        document.addEventListener('input', function(e) {
+        document.addEventListener('input', function (e) {
             if (e.target.id === 'purchaseTax' || e.target.id === 'purchaseDiscount') {
                 let itemsSum = Number(document.getElementById('purchaseTotal')?.value) || 0;
                 updatePurchaseGrandTotal(itemsSum);
             }
         });
     </script>
+
 @endsection
